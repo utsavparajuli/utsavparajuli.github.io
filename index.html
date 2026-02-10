@@ -1,0 +1,220 @@
+---
+layout: default
+title: ""
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Will You Be My Valentine?</title>
+<style>
+  /* --- Basic styles --- */
+  body {
+    background: radial-gradient(circle at top, #ff9a9e, #fad0c4);
+    font-family: "Comic Sans MS", "Poppins", cursive;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    transition: background 1s ease;
+  }
+
+  body.fireworks-mode {
+    background: black;
+  }
+
+  .container {
+    text-align: center;
+    margin-top: 15vh;
+  }
+
+  h1 {
+    font-size: 3rem;
+    color: #b30059;
+  }
+
+  .buttons {
+    margin-top: 30px;
+  }
+
+  button {
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    margin: 10px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  #yesBtn {
+    background-color: #ff4d88;
+    color: white;
+  }
+
+  #noBtn {
+    background-color: #999;
+    color: white;
+  }
+
+  .hidden { display: none; }
+
+  /* --- Floating hearts --- */
+  .hearts span {
+    position: fixed;
+    bottom: -20px;
+    font-size: 24px;
+    animation: floatUp 6s linear infinite;
+    color: #ff3366;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+  }
+
+  /* --- Stars --- */
+  .star {
+    position: fixed;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: twinkle 1.5s infinite alternate;
+  }
+
+  @keyframes twinkle {
+    0% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+    100% { opacity: 0.2; transform: scale(1); }
+  }
+
+  /* --- Fireworks --- */
+  .firework {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #ff4d88;
+    border-radius: 50%;
+    opacity: 0.9;
+    pointer-events: none;
+  }
+
+    /* Night mode text colors */
+    body.fireworks-mode h1,
+    body.fireworks-mode h2,
+    body.fireworks-mode p,
+    body.fireworks-mode button {
+    color: #ff99cc; /* bright pink for visibility on black */
+    }
+
+    body.fireworks-mode #yesBtn {
+    background-color: #ff3366; /* brighter button color */
+    color: white;
+    }
+
+    body.fireworks-mode #noBtn {
+    background-color: #555; /* muted but visible */
+    color: white;
+    }
+
+</style>
+</head>
+<body>
+
+  <!-- Floating hearts container -->
+  <div class="hearts"></div>
+
+  <div class="container">
+    <h1>💖 Will you be my Valentine? 💖</h1>
+
+    <div class="buttons">
+      <button id="yesBtn">YES 💘</button>
+      <button id="noBtn">No 😢</button>
+    </div>
+
+    <div id="yay" class="hidden">
+      <h2>YAYYYYY!!! 🎉💞</h2>
+      <p>You made my heart explode 💥</p>
+      <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="celebrate">
+    </div>
+  </div>
+
+<script>
+  // --- Floating hearts ---
+  const heartsContainer = document.querySelector(".hearts");
+  setInterval(() => {
+    const heart = document.createElement("span");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = 3 + Math.random() * 3 + "s";
+    heartsContainer.appendChild(heart);
+    setTimeout(() => { heart.remove(); }, 6000);
+  }, 300);
+
+  // --- Buttons logic ---
+  let noCount = 0;
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const yay = document.getElementById("yay");
+
+  noBtn.addEventListener("click", () => {
+    noCount++;
+    let scale = 1 + noCount * 0.5;
+    yesBtn.style.transform = `scale(${scale})`;
+    if (noCount >= 5) noBtn.style.display = "none";
+  });
+
+  yesBtn.addEventListener("click", () => {
+    document.querySelector(".buttons").style.display = "none";
+    yay.classList.remove("hidden");
+
+    // Switch background to night
+    document.body.classList.add("fireworks-mode");
+
+    // Create stars
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement("div");
+      star.classList.add("star");
+      star.style.top = Math.random() * 100 + "vh";
+      star.style.left = Math.random() * 100 + "vw";
+      document.body.appendChild(star);
+    }
+
+    // Fireworks container
+    const fireworksContainer = document.createElement("div");
+    document.body.appendChild(fireworksContainer);
+
+    // Fireworks generator
+    setInterval(() => {
+      for (let i = 0; i < 10; i++) {
+        const fw = document.createElement("div");
+        fw.classList.add("firework");
+        fw.style.top = window.innerHeight / 2 + "px";
+        fw.style.left = window.innerWidth / 2 + "px";
+        const angle = Math.random() * 2 * Math.PI;
+        const speed = 2 + Math.random() * 4;
+        const dx = Math.cos(angle) * speed * 10;
+        const dy = Math.sin(angle) * speed * 10;
+
+        fireworksContainer.appendChild(fw);
+
+        let posX = 0, posY = 0;
+        const anim = setInterval(() => {
+          posX += dx * 0.05;
+          posY += dy * 0.05;
+          fw.style.transform = `translate(${posX}px, ${posY}px)`;
+          fw.style.opacity -= 0.02;
+          if (fw.style.opacity <= 0) {
+            fw.remove();
+            clearInterval(anim);
+          }
+        }, 16);
+      }
+    }, 500);
+  });
+</script>
+
+</body>
+</html>
