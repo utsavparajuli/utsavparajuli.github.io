@@ -31,6 +31,11 @@ title: ""
   h1 {
     font-size: 3rem;
     color: #b30059;
+    transition: color 1s ease;
+  }
+
+  h2, p {
+    transition: color 1s ease;
   }
 
   .buttons {
@@ -44,7 +49,7 @@ title: ""
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease, color 1s ease, background-color 1s ease;
   }
 
   #yesBtn {
@@ -101,29 +106,29 @@ title: ""
     pointer-events: none;
   }
 
-    /* Night mode text colors */
-    body.fireworks-mode h1,
-    body.fireworks-mode h2,
-    body.fireworks-mode p,
-    body.fireworks-mode button {
-    color: #ff99cc; /* bright pink for visibility on black */
-    }
+  /* --- Night mode text colors --- */
+  body.fireworks-mode h1,
+  body.fireworks-mode h2,
+  body.fireworks-mode p,
+  body.fireworks-mode button {
+    color: #ff99cc; /* visible on black */
+  }
 
-    body.fireworks-mode #yesBtn {
-    background-color: #ff3366; /* brighter button color */
+  body.fireworks-mode #yesBtn {
+    background-color: #ff3366;
     color: white;
-    }
+  }
 
-    body.fireworks-mode #noBtn {
-    background-color: #555; /* muted but visible */
+  body.fireworks-mode #noBtn {
+    background-color: #555;
     color: white;
-    }
+  }
 
 </style>
 </head>
 <body>
 
-  <!-- Floating hearts container -->
+  <!-- Floating hearts -->
   <div class="hearts"></div>
 
   <div class="container">
@@ -140,6 +145,12 @@ title: ""
       <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="celebrate">
     </div>
   </div>
+
+  <!-- Music -->
+  <audio id="valentineMusic" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
 <script>
   // --- Floating hearts ---
@@ -170,7 +181,12 @@ title: ""
     document.querySelector(".buttons").style.display = "none";
     yay.classList.remove("hidden");
 
-    // Switch background to night
+    // Play music
+    const music = document.getElementById("valentineMusic");
+    music.volume = 0.5;
+    music.play();
+
+    // Switch to night mode
     document.body.classList.add("fireworks-mode");
 
     // Create stars
